@@ -420,3 +420,16 @@
   --bs-btn-disabled-bg: #6c757d;
   --bs-btn-disabled-border-color: #6c757d;
 }
+.file_attachement{
+  display: flex;
+  flex-direction: row;
+  margin-left: 2rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+  cursor: pointer;
+  height: 32px;
+}
+.file-icon{
+  margin-left: 0.3rem;
+  margin-top: 0.2rem;
+}

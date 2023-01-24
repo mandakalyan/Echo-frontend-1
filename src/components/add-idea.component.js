@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import IdeaService from "../services/idea.service";
 import "./add-idea.component.css"
+import FileService from "../services/file.service";
+
 
 export default class AddIdea extends Component {
   constructor(props) {
@@ -11,6 +13,7 @@ export default class AddIdea extends Component {
     this.onChangeCategory = this.onChangeCategory.bind(this);
     this.saveidea = this.saveidea.bind(this);
     this.newidea = this.newidea.bind(this);
+    this.onChangeFile=this.onChangeFile.bind(this);
 
     this.state = 
     {
@@ -57,6 +60,14 @@ export default class AddIdea extends Component {
       category: e.target.value
     });
   }
+  onChangeFile(e){
+    e.preventDefault();
+    console.log(e.target.files[0])
+    this.setState({
+     currentFile:e.target.files[0],
+     progress:0
+    });
+  }
 
   saveidea() {
     var idea = {
@@ -64,9 +75,38 @@ export default class AddIdea extends Component {
       ideaDescription: this.state.description,
       benefitCategory: this.state.benefitCategory,
       category: this.state.category
-    };
+    };}
+    async saveidea() {
+      let fileId;
+         await FileService.uploadFile(this.state.currentFile, (event) => {
+          this.setState({
+            progress: Math.round((100 * event.loaded) / event.total),
+          });
+        })
+          .then((response) => {
+            fileId=response.data;
+            this.setState({
+              fileId:response.data
+            });
+          })
+            .catch(() => {
+              this.setState({
+                progress: 0,
+                message: "Could not upload the file!",
+                currentFile: undefined,
+              });
+            });
+            console.log(fileId)
+        var idea = {
+          ideaTitle: this.state.title,
+          ideaDescription: this.state.description,
+          benefitCategory: this.state.benefitCategory,
+          category: this.state.category,
+          fileId:fileId
+        };
+    
 
-    IdeaService.addIdea(idea)
+    await IdeaService.addIdea(idea)
       .then(response => {
         this.setState({
           id: response.data.id,
@@ -98,6 +138,11 @@ export default class AddIdea extends Component {
   }
 
   render() {
+    const {
+      currentFile,
+      progress,
+      message,
+    } = this.state;
     return (
       <div className="submit-form add-idea-card
       ">
@@ -164,6 +209,27 @@ export default class AddIdea extends Component {
                   )}
                 </select>
             </div>
+            <div class="form-group">
+              <label for="description">Attach Document</label>
+             
+                <input className="form-control" type="file" onChange={this.onChangeFile} name="currentFile"  id="file" /></div>
+                {currentFile && (
+            <div className="progress">
+              <div
+                className="progress-bar progress-bar-info progress-bar-striped"
+                role="progressbar"
+                aria-valuenow={progress}
+                aria-valuemin="0"
+                aria-valuemax="100"
+                style={{ width: progress + "%" }}
+              >
+                {progress}%
+              </div>
+            </div>
+        )}
+         {message!=='' &&<div className="alert alert-light" role="alert">
+          {message}
+        </div>}
 
             <div style={{"textAlign":"center"}}>
               <button onClick={this.saveidea} style={{"marginTop":"20px"}} className="btn btn-secondary"
@@ -178,3 +244,4 @@ export default class AddIdea extends Component {
     );
   }
 }
+

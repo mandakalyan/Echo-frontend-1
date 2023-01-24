@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import IdeaService from "../services/idea.service";
 import "./view-idea-by-id.component.css";
-import { AiOutlineLike, AiTwotoneLike } from "react-icons/ai";
+import { AiOutlineAlignCenter, AiOutlineLike, AiTwotoneLike } from "react-icons/ai";
 import { TbArrowBackUp } from "react-icons/tb";
 import { BiEditAlt, BiMedal } from "react-icons/bi";
 import flowImage from "./images/flowStatus.jpg";
@@ -17,9 +17,14 @@ import EditIdea from "./edit-idea.component";
 import UserService from "../services/user.service";
 import { FcLike, FcLikePlaceholder } from "react-icons/fc";
 import EditIdeaComment from "./edit-idea-comment.component";
+import fileService from "../services/file.service";
+import {AiFillFileText} from "react-icons/ai"
+
 
 function ViewIdeaById() {
   const [idea, setIdea] = useState({});
+  const [Status, setStatus] = useState({});
+
   const [benefitCategory, setBenefitCategory] = useState({});
   const [category, setCategory] = useState({});
   const { id } = useParams();
@@ -60,6 +65,7 @@ function ViewIdeaById() {
   };
 
   const handleUpdate = async(e) => {
+    setStatus(e.target.value);
     let myIdea = idea;
     myIdea.ideaStatus = e.target.value;
     await IdeaService.updateIdea(idea.id, myIdea);
@@ -116,7 +122,7 @@ function ViewIdeaById() {
     setCid(d1);
     setIdeaComment(d2); 
   }
-  
+  5
   const ideaCommenthandleClose = () => {
     setIdeacommentshow(false);
     setCid("");
@@ -125,6 +131,27 @@ function ViewIdeaById() {
 
   const navigate = useNavigate();
   const handleClick = () => { navigate(-1); };
+  const downloadFile=async(e)=>{
+    await fileService.downloadFile(idea.fileId).then((res)=>{
+      console.log(res.data)
+      const blob = new Blob([res.data], {type: res.data.type});
+      const href = URL.createObjectURL(blob);
+      const contentDisposition = res.headers.get("content-disposition");
+      let fileName = 'unknown';
+      if (contentDisposition) {
+        const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+        if (fileNameMatch.length === 2)
+            fileName = fileNameMatch[1];
+    }
+      const link = document.createElement('a');
+      link.href = href;
+      link.setAttribute('download', fileName); 
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(href);
+    })
+  }
 
   return (
     <div className="specific_idea">
@@ -207,10 +234,10 @@ function ViewIdeaById() {
             <strong><p>Want to change status of Idea</p></strong>
             <div className="update__container">
               {idea.ideaStatus === "RAISED" && (
-                <button className="update__container_buttons" value="REVIEWED" onClick={handleUpdate} >Reviewed</button>
-              )}
+              //   <button className="update__container_buttons" value="REVIEWED" onClick={handleUpdate} >Reviewed</button>
+              // )}
 
-              {idea.ideaStatus === "REVIEWED" && (
+              // {idea.ideaStatus === "REVIEWED" && (
                 <div>
                   <button className="update__container_buttons" value="ACCEPTED" onClick={handleUpdate} >Accepted</button>
                   <button className="update__container_buttons_r" value="REJECTED" onClick={handleUpdate} >Rejected</button>
@@ -225,6 +252,11 @@ function ViewIdeaById() {
             </div>
           </div>
         )}
+        {idea.fileId!==null&& <div className="file_attachement" onClick={downloadFile}>
+          <p>file-attachment</p>
+          <AiFillFileText className="file-icon"/>
+        </div>}
+
 
         <div className="idea_likes">
           {likeId !== "" ?
@@ -255,7 +287,7 @@ function ViewIdeaById() {
           </div>
         </div>
       </div>
-
+      
       <div className="comments_section">
         {comments.map(
           comment => (
