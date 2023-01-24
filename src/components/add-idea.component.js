@@ -25,7 +25,11 @@ export default class AddIdea extends Component {
       published: false,
       submitted: false,
       benefitCategoriesList: [],
-      categoriesList: []
+      categoriesList: [],
+      currentFile:'',
+      errors: {},
+      progress:0,
+      message:''
     };
   }
 
@@ -34,6 +38,7 @@ export default class AddIdea extends Component {
       this.setState({ benefitCategoriesList: res.data }) })
 
     IdeaService.getCategoriesList().then(res => {
+      console.log(res.date+"hello")
       this.setState({ categoriesList: res.data }) })
   }
 
@@ -62,66 +67,96 @@ export default class AddIdea extends Component {
   }
   onChangeFile(e){
     e.preventDefault();
-    console.log(e.target.files[0])
     this.setState({
      currentFile:e.target.files[0],
      progress:0
     });
   }
-
-  saveidea() {
-    var idea = {
-      ideaTitle: this.state.title,
-      ideaDescription: this.state.description,
-      benefitCategory: this.state.benefitCategory,
-      category: this.state.category
-    };}
-    async saveidea() {
-      let fileId;
-         await FileService.uploadFile(this.state.currentFile, (event) => {
-          this.setState({
-            progress: Math.round((100 * event.loaded) / event.total),
-          });
-        })
-          .then((response) => {
-            fileId=response.data;
-            this.setState({
-              fileId:response.data
-            });
-          })
-            .catch(() => {
-              this.setState({
-                progress: 0,
-                message: "Could not upload the file!",
-                currentFile: undefined,
-              });
-            });
-            console.log(fileId)
-        var idea = {
-          ideaTitle: this.state.title,
-          ideaDescription: this.state.description,
-          benefitCategory: this.state.benefitCategory,
-          category: this.state.category,
-          fileId:fileId
-        };
+  formValidation=()=>{
+    const {title,description,benefitCategory,category,currentFile}=this.state;
+    let isValid= true;
+    const errors={};
+    console.log(title.length)
+    if(title.length<10||title.length>50 ) {
+        errors.title="Title must be in range of 10 to 50 Character";
+        isValid=false;
+    }
     
+    console.log(description.length)
+    if(description.length>200 || description.length<25){
+        errors.description="Description must be in range of 25 to 200 Character";
+        isValid=false;
+    }
+    // console.log(expiryDate)
+    if(benefitCategory===""){
+      errors.benefitCategory="Please Enter BenefitCategory";
+      isValid=false;
+  }
+  if(category===""){
+    errors.category="Please Enter Category";
+    isValid=false;
+}
+if(currentFile.size>5242880){
+  errors.currentFile="File size exceeded. Upload file size limit is 5MB";
+  isValid=false;
+}
 
-    await IdeaService.addIdea(idea)
-      .then(response => {
-        this.setState({
-          id: response.data.id,
-          title: response.data.title,
-          description: response.data.description,
-          benefitCategory: response.data.benefitCategory,
-          category: response.data.category,
-          published: response.data.published,
-          submitted: true
-        });
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
+
+    console.log(errors)
+    this.setState({errors});
+    return isValid;
+
+}  
+
+  
+    async saveidea() {
+      const isValid=this.formValidation();
+       if(this.state.currentFile.size<5242880||this.state.currentFile===''){
+        let fileId;
+        if(this.state.currentFile!==''){
+        await FileService.uploadFile(this.state.currentFile, (event) => {
+         this.setState({
+           progress: Math.round((100 * event.loaded) / event.total),
+         });
+       })
+         .then((response) => {
+           fileId=response.data;
+           this.setState({
+             fileId:response.data
+           });
+         })
+           .catch(() => {
+             this.setState({
+               progress: 0,
+               message: "Could not upload the file!",
+               currentFile: undefined,
+             });
+           });
+        }
+       var idea = {
+         ideaTitle: this.state.title,
+         ideaDescription: this.state.description,
+         benefitCategory: this.state.benefitCategory,
+         category: this.state.category,
+         fileId:fileId
+       };
+   if(isValid){
+   await IdeaService.addIdea(idea)
+     .then(response => {
+       this.setState({
+         id: response.data.id,
+         title: response.data.title,
+         description: response.data.description,
+         benefitCategory: response.data.benefitCategory,
+         category: response.data.category,
+         published: response.data.published,
+         submitted: true
+       });
+       console.log(response.data);
+     })
+        }
+      }
+      
   }
 
   newidea() 
@@ -144,8 +179,11 @@ export default class AddIdea extends Component {
       message,
     } = this.state;
     return (
+    
+
       <div className="submit-form add-idea-card
       ">
+        
         {this.state.submitted ? (
           <div style={{"textAlign":"center"}}>
             <h4>Idea submitted successfully!</h4>
@@ -155,6 +193,7 @@ export default class AddIdea extends Component {
           <div>
             <h1>Fresh Ideas</h1>
             <div className="form-group">
+            <p className="error_class">{this.state.errors.title}</p>
               <label htmlFor="title">Title</label>
               <input
                 type="text"
@@ -168,6 +207,7 @@ export default class AddIdea extends Component {
             </div>
 
             <div class="form-group">
+            <p className="error_class">{this.state.errors.description}</p>
               <label for="description">Description</label>
               <textarea
                 className="form-control"
@@ -182,6 +222,8 @@ export default class AddIdea extends Component {
             </div>
 
             <div class="form-group">
+            <p className="error_class">{this.state.errors.benefitCategory
+            }</p>
               <label>Benefit Category</label>
               <select class="form-select" aria-label="Default select example"
               value={this.state.benefitCategory}
@@ -196,6 +238,7 @@ export default class AddIdea extends Component {
             </div>
 
             <div class="form-group">
+            <p className="error_class">{this.state.errors.category}</p>
               <label>Category</label>
                 <select class="form-select" aria-label="Default select example"
                 value={this.state.category}
@@ -210,6 +253,7 @@ export default class AddIdea extends Component {
                 </select>
             </div>
             <div class="form-group">
+            <p className="error_class">{this.state.errors.currentFile}</p>
               <label for="description">Attach Document</label>
              
                 <input className="form-control" type="file" onChange={this.onChangeFile} name="currentFile"  id="file" /></div>
@@ -233,7 +277,7 @@ export default class AddIdea extends Component {
 
             <div style={{"textAlign":"center"}}>
               <button onClick={this.saveidea} style={{"marginTop":"20px"}} className="btn btn-secondary"
-              disabled={this.state.title.length<2 || this.state.description.length<1 || this.state.benefitCategory==="" || this.state.category===""}>
+              >
                 Submit
               </button>
             </div>

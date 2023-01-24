@@ -86,7 +86,7 @@ const Challenges = ({data, showAdminBoard}) => {
                                                 }}
                                             />
                                         </td>
-                                    )} 
+                                  )}  
                                     
                             </tr>
                             // </a>

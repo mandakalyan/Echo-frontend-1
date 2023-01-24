@@ -4,19 +4,22 @@ import BusinessChallengesService from "../services/business-challenge.service";
 import "./search-ideas.component.css";
 import Highlighter from "react-highlight-words";
 
+
 export default class Dd extends Component {
   constructor(props) {
     super(props);
     this.onChangeSearchItem = this.onChangeSearchItem.bind(this);
     this.searchItem = this.searchItem.bind(this);
     this.state = { open: false };
-
+ 
+ 
     this.state = {
       tutorials: [],
       currentTutorial: null,
       currentIndex: -1,
       searchItem: "",
       search: false,
+     
     };
   
   }
@@ -32,8 +35,10 @@ export default class Dd extends Component {
       search: true
     });
   }
+  
 
   searchItem() {
+    
     this.setState({
       currentTutorial: null,
       currentIndex: -1
@@ -60,35 +65,52 @@ export default class Dd extends Component {
       });
       
   }
+
   
   render() {
     const { searchItem, ideas,BusinessChallenges, currentIndex } = this.state;
 
     return (
-      <div className="list row">
-        <div>
+      <div>
+        <div >
           <input
+          
             type="text"
             className="form-control search-ideas-form-control"
-            placeholder="Search by title and description"
+            placeholder="Search .."
             value={searchItem}
             onChange={this.onChangeSearchItem}
-            onKeyDown={this.searchItem}
+            onKeyUp={this.searchItem}
+            style = {{"width":"200px",
+          "left":"-4"}}
           />
+
         </div>
 
-        <ul className="list-group">
+       
+        
+        <form className = "form" autocomplete = "off" onKeyDown={false} style = {{"width": "60vmin",
+        "height": "20px",
+        "position": "fixed",
+        "transform": "translate(-50%, -50%)",
+        "top": "8%",
+        "left": "460px",
+       "right": "90%",
+        "padding": "10px 0"}} >
+        <ul className="list-group" >
+        
           {ideas &&
             ideas.map((idea, index) => (
               <li
                 className={
                   "list-group-item " +
-                  (index === currentIndex ? "active" : "")
+                  (index === currentIndex ? "active" : "") 
                 }
                 onClick={() => this.setActiveTutorial(idea, index)}
-                key={index}
+                key={index}  style={{"text-decoration":"none"}} 
+                
               >
-                <a href={'/viewIdea/' + idea.id}>
+                <a href={'/viewIdea/' + idea.id} style = {{"text-decoration" :"none", "background":"white", }}>
                   <div className='idea-title'><b><u>
                     <Highlighter
                       highlightClassName="YourHighlightClass"
@@ -107,15 +129,12 @@ export default class Dd extends Component {
                       textToHighlight={idea.ideaDescription}
                     />
                   </div>
-                  <div className="status"><b>Status : </b>{idea.ideaStatus}</div>
+                  {/* <div className="status"><b>Status : </b>{idea.ideaStatus}</div> */}
                 </a>
               </li>
               
             ))}
-             
-        </ul>
-        <ul className="list-group">
-            {BusinessChallenges &&
+             {BusinessChallenges &&
               BusinessChallenges.map((challenge, index) => (
                 <li
                   className={
@@ -147,8 +166,11 @@ export default class Dd extends Component {
                   <div className="status"><b>Status : </b>{challenge.challengeStatus}</div>
                 </a>
 
-                </li>))}</ul>
-      </div>
+                </li>))}
+             
+        </ul> </form>
+       </div>
+     
     );
   }
 }

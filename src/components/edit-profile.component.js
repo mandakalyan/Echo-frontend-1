@@ -103,14 +103,17 @@ export default class EditProfile extends Component {
     const isValid = this.formValidation();
     var id1 = this.props.id;
     if (isValid) {
+      var d=this.state.department.name;
+      //console.log("hello"+d)
       var profile = {
         id:id1,
         fname:this.state.fname,
         lname:this.state.lname,
         email:this.state.email,
-        department:this.state.department,
+        department:d,
         account:this.state.account
       };
+     // console.log(profile)
       var user = AuthService.getCurrentUser();
       UserService.updateUserByEmail(profile.email, profile, user).then(() => { this.setState({ submitted: true }); });
     }

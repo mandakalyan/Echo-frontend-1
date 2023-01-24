@@ -18,6 +18,7 @@ import UserService from "./services/user.service";
 import AddIdea from "./components/add-idea.component";
 import AddChallenge from "./components/add-challenge.component";
 import FreshIdeasPage from "./components/fresh-ideas-page.component";
+import AllUsers from "./components/ChangeUserProfile.component";
 import BusinessChallengesPage from "./components/business-challenges-page.component";
 import SearchDropdown from "./components/search-dropdown.component";
 import ViewIdeaById from "./components/view-idea-by-id.component";
@@ -26,11 +27,12 @@ import MyFavoriteIdeasPage from "./components/my-favorite-ideas-page.component";
 import EditIdeaComment from "./components/edit-idea-comment.component";
 import EditChallengeComment from "./components/edit-challenge-comment.component";
 import SSILogo from "./components/images/logosoprasteria.jpg"
+import Dd from "./components/search-ideas-and-bc.component";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.logOut = this.logOut.bind(this);
+    // this.logOut = this.logOut.bind(this);
 
     this.state = {
       showAdminBoard: false,
@@ -53,25 +55,14 @@ class App extends Component {
 
   }
 
-  logOut() {
-    AuthService.logout();
-    this.setState({
-      showAdminBoard: false,
-      currentUser: undefined,
-      userDetails: [],
-    });
-  }
-
   render() {
     const { currentUser, showAdminBoard, userDetails } = this.state;
 
     return (
       <div>
-        {/* <Sidebar currentUser = {currentUser} isAdmin = {showAdminBoard} /> */}
         {currentUser && ( <Sidebar currentUser = {currentUser} isAdmin = {showAdminBoard} /> ) }
 
         <nav className="navbar nav-tabs navbar-expand-sm">
-        {/* {currentUser && ( <Sidebar /> ) } */}
           <Link to={"/about"} className="navbar-brand">
             <strong style={{"fontSize":"xx-large"}}> <h1 className="app-title-navbar">Echo</h1></strong>
           </Link>
@@ -102,12 +93,7 @@ class App extends Component {
 
             {currentUser && (
               <div className="navbar-nav collapse navbar-collapse justify-content-end">
-                <li className="nav-item">
-                  <Link to={"/search"} className="nav-link">
-                    Search
-                  </Link>
-                </li>
-
+                <Dd/>
                 <li className="nav-item">
                   <Link to={"/about"} className="nav-link">
                     About
@@ -130,11 +116,11 @@ class App extends Component {
                   {userDetails.fname + " " + userDetails.lname}
                   </a>
 
-                  <a href="/login" className="nav-link" onClick={this.logOut}>
+                  {/* <a href="/login" className="nav-link" onClick={this.logOut}>
                     Logout
-                  </a>
+                  </a> */}
               </div>
-              <Userprofile />
+              <Userprofile showAdminBoard={showAdminBoard} currentUser={currentUser} userDetails={userDetails}  />
             </div>
             
             ) : (
@@ -180,6 +166,7 @@ class App extends Component {
             <Route path="/editChallengeComment/:commentId/:commentText/:challengeId" element={<EditChallengeComment/>}/>
             <Route path = "/editIdeaComment/:commentId/:commentText" element = {<EditIdeaComment />}/>
             <Route path = "/myFavorites" element = {<MyFavoriteIdeasPage />}/>
+            <Route path="/Allusers" element={<AllUsers/>}/>
           </Routes>
         </div>
 

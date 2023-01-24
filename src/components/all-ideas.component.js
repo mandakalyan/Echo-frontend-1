@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { AiOutlineLike, AiOutlineComment } from "react-icons/ai";
 import IdeaService from '../services/idea.service';
+import UserService from '../services/user.service';
 
 import { BiUpArrow, BiDownArrow } from "react-icons/bi"
 import { VscFilterFilled, VscFilter } from "react-icons/vsc"
@@ -12,7 +13,7 @@ import { useEffect } from 'react';
 const AllIdeas = ({data}) => {
     const [currentData, setCurrentData] = useState([])
     const [isFavorite, setIsFavorite] = useState(false)
-
+    console.log(data)
     useEffect(() => {
         setCurrentData(data)
     }, []);
@@ -25,8 +26,14 @@ const AllIdeas = ({data}) => {
     }, [isFavorite]);
 
     const handleIdSort = async()=>{
-        await IdeaService.getIdeasSortedById().then((res) => { setCurrentData(res.data) });
+        
+        await IdeaService.getIdeasSortedById().then((res) => { 
+           
+            setCurrentData(res.data) });
     }
+    UserService.getAllUsers().then((res)=>{
+        console.log(res.data.role);
+    })
 
     return (
         <table className = "table">

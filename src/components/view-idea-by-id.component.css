@@ -9,7 +9,54 @@
   flex-direction: column;
   align-items: flex-start;
 }
-
+@media screen and (max-width:691px) {
+  .idea  {
+    width:900px
+  
+    }
+  }
+  @media screen and (max-width:550px) {
+    .idea  {
+     width: 900px;
+    
+      }
+    }
+    @media screen and (max-width:250px) {
+      .idea  {
+       width: 900px;
+      
+        }
+      }
+      @media screen and (max-width:450px) {
+        .idea  {
+         width: 900px;
+        
+          }
+        }
+        @media screen and (max-width:588px) {
+          .idea  {
+           width: 900px;
+          
+          }
+            }
+@media screen and (max-width:588px) {
+              .idea  {
+               width: 800px;
+              
+              }
+                }
+ @media screen and (max-width:891px) {
+                  .idea  {
+                   width: 800px;
+                  
+                  }
+                    }
+                    @media screen and (max-width:1050px) {
+                      .idea  {
+                       width: 900px;
+                      
+                        }
+                      }
 .edit_idea_button {
   margin-left: 2rem;
   color: #444;
@@ -216,6 +263,25 @@
   font-family: Helvetica;
   height: 28px;
 }
+@media screen and (max-width:1092px) {
+  .idea-rewards   {
+   margin-left: 7rem;
+  
+  }
+    }
+    @media screen and (max-width:1126px) {
+      .idea-rewards   {
+       margin-left: 5rem;
+      
+      }
+        }
+        @media screen and (max-width:1160px) {
+          .idea-rewards   {
+           margin-left: 5rem;
+          
+          }
+            }
+
 
 .idea_status_rewards {
   display: flex;
@@ -224,6 +290,12 @@
   justify-content: flex-start;
   width: 54rem;
 }
+@media screen and (max-width:550px) {
+  .idea_status_rewards {
+ margin-left: 400rem;
+  
+    }
+  }
 
 .rewards_drop {
   height: 20px;
@@ -285,11 +357,29 @@
 .badge {
   margin-right: 2rem;
   right: 2rem;
-  margin-left: 41.7rem;
+  margin-left: 39.7rem;
   display: flex;
   flex-direction: row;
   align-items: end;
 }
+@media screen and (max-width:1092px) {
+  .badge {
+ margin-left: 22.7rem;
+  
+    }
+  }
+  @media screen and (max-width:1126px) {
+    .badge {
+   margin-left: 20.7rem;
+    
+      }
+    }
+    @media screen and (max-width:1160px) {
+      .badge {
+     margin-left: 20.7rem;
+      
+        }
+      }
 
 .ruby_badge {
   color: rgb(250, 22, 250);
@@ -420,6 +510,19 @@
   --bs-btn-disabled-bg: #6c757d;
   --bs-btn-disabled-border-color: #6c757d;
 }
+@media screen and (max-width:1024px) {
+.btn-secondary {
+  margin-right: -600px;
+
+  }
+}
+@media screen and (max-width:691px) {
+  .btn-secondary {
+    margin-right: -600px;
+  
+    }
+  }
+
 .file_attachement{
   display: flex;
   flex-direction: row;

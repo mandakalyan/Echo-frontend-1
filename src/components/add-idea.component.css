@@ -15,3 +15,21 @@
 /* .form-select{
     width: 300px;
 } */
+.file-icon{
+    color: rgb(96, 172, 210);
+   
+   
+}
+
+.file-delete-icon{
+    margin-top: 3px;
+    color: rgb(96, 172, 210);
+    margin-left: 1rem;
+    cursor: pointer;
+    
+}
+.form-group-existing-file{
+    display: flex;
+    flex-direction: row;
+    margin-left: -0.3rem;
+}

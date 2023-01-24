@@ -2,6 +2,7 @@ import axios from 'axios';
 import authHeader from './auth-header';
 
 const USER_API_BASE_URL = "http://localhost:8080/users/";
+const USER_API_BASE_URL1 = "http://localhost:8080/getAll";
 
 class UserService {
 
@@ -23,6 +24,9 @@ class UserService {
 
     updateUserByEmail(email, profile){
         return axios.post(USER_API_BASE_URL + email, profile,{ headers: authHeader() });
+    }
+    getAllUsers(){
+        return axios.get(USER_API_BASE_URL1 , { headers: authHeader() });
     }
 }
 

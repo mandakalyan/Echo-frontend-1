@@ -1,14 +1,42 @@
 .list-group{
-    margin-top: 10px;
-    margin-left: 10px;
+    margin-top: 15px;
+    margin-left: 140px;
+    position: absolute;
+    height: 250px;
+    overflow: auto;
+    /* left: 650px;
+    border: 1px solid #333333;
+  width: 200px;
+  height: 100px;
+  overflow-y: scroll; */
+
+
+    /* width: 100%;
+    
+   
+    margin-bottom: 0px;
+    padding: 10px 5px; */
+   
 }
+.list-group:-webkit-autofill{
+    border: 3px solid darkorange
+}
+.form{
+    
+}
+input[type="text"] {
+    left :4500px;
+  }
 
 .list-group-item {
     /* width: 645px; */
-    width: 200%;
-    background-color: #f7f2f8;
+    /* width: 100%;
+    background-color: white;
     border: transparent;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
+    padding: 10px 5px; */
+    
+data-view-type:1;
 }
 
 a{

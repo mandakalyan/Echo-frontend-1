@@ -8,3 +8,12 @@
 .challenge-date-input{
     width: 300px;
 }
+.file-icon{
+    color: rgb(96, 172, 210);
+   
+}
+.existing-file{
+    display: flex;
+    flex-direction: row;
+   
+}

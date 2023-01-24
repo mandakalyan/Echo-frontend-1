@@ -5,6 +5,7 @@ import './Sidebar.css';
 import { FcAddDatabase, FcAddRow, FcIdea } from "react-icons/fc";
 import { FcTimeline } from "react-icons/fc";
 import { CgCardHearts } from "react-icons/cg";
+import {FcCollaboration} from "react-icons/fc";
 
 
 const Sidebar = (props) => {
@@ -40,6 +41,12 @@ const Sidebar = (props) => {
             className="bm-item" href="/myFavorites">
               <CgCardHearts color='rgb(181, 72, 72)' style={{"fontSize":"30px"}} />
               <div>My Favorites</div>
+            </a>
+            <a
+            // onMouseEnter={}
+            className="bm-item" href="/Allusers">
+              <FcCollaboration  style={{"fontSize":"30px"}} />
+              <div>All Users</div>
             </a>
           </>
         )}

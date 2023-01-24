@@ -46,9 +46,13 @@ body {
 }
 
 .nav-link {
-  padding: 0px;
+
+  padding: 10px;
+
   text-align: center;
+
   /* color: rgba(245, 245, 245, 0.734); */
+
 }
 
 .nav-link:hover,

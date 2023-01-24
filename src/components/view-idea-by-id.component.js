@@ -18,7 +18,8 @@ import UserService from "../services/user.service";
 import { FcLike, FcLikePlaceholder } from "react-icons/fc";
 import EditIdeaComment from "./edit-idea-comment.component";
 import fileService from "../services/file.service";
-import {AiFillFileText} from "react-icons/ai"
+import {AiFillFileText} from "react-icons/ai";
+import {FaRegCommentDots, FaComment} from "react-icons/fa"
 
 
 function ViewIdeaById() {
@@ -41,9 +42,15 @@ function ViewIdeaById() {
   const [ideacomment, setIdeaComment]=useState("");
   const [editId, setEditId] = useState("");
   const [localLiked, setLocalLiked] = useState(false);
-
+  const [localcommented, setLocalcommented]=useState(false);
+  const [file,setFile]=useState(false)
+ 
   useEffect(() => {
     IdeaService.getIdeaByIdeaId(id).then((res) => {
+      if(res.data.fileId!=null){
+        setFile(true)
+      }
+      console.log(+"hello")
       setIdea(res.data);
       setBenefitCategory(res.data.benefitCategory)
       setCategory(res.data.category)
@@ -101,6 +108,14 @@ function ViewIdeaById() {
     await IdeaService.isFavoriteIdeaOfCurrentUser(id).then((res) => { setLocalLiked(res.data); }) 
   }
 
+  const handleComment=()=>{
+    setLocalcommented(false);
+  }
+  const handleComment1=()=>{
+    setLocalcommented(true);
+    }
+  
+   
   const handleRewards=(e)=>{
     if(e.target.value==="100"){ setRewards(100); }
     else if(e.target.value==="50"){ setRewards(50); }
@@ -122,7 +137,7 @@ function ViewIdeaById() {
     setCid(d1);
     setIdeaComment(d2); 
   }
-  5
+  
   const ideaCommenthandleClose = () => {
     setIdeacommentshow(false);
     setCid("");
@@ -225,7 +240,7 @@ function ViewIdeaById() {
                 </button>
               </div>
             </div>
-          }
+           } 
 
         </div>
         
@@ -253,8 +268,8 @@ function ViewIdeaById() {
           </div>
         )}
         {idea.fileId!==null&& <div className="file_attachement" onClick={downloadFile}>
-          <p>file-attachment</p>
-          <AiFillFileText className="file-icon"/>
+         { file!==false&&<p>file-attachment</p>}
+         {file!==false&& <AiFillFileText className="file-icon"/>}
         </div>}
 
 
@@ -277,7 +292,13 @@ function ViewIdeaById() {
               <FcLikePlaceholder size={"40px"} color="red" onClick={handleFavorite} />
             }
           </div>
-
+          <div>
+            {localcommented?(
+          <FaComment size={"40px"} color={"skyblue"} onClick={handleComment}/>)
+          :
+          <FaRegCommentDots size={"40px"} color={"skyblue"}  onClick={handleComment1}/>
+            }
+          </div>
           <div className="badge">
             {idea.rewards===100&& <div className="badge_points"><BiMedal className="ruby_badge" /><p>{idea.rewards}</p></div>}
             {idea.rewards===50&& <div className="badge_points"><BiMedal className="diamond_badge" /><p>{idea.rewards}</p></div>}
@@ -287,9 +308,30 @@ function ViewIdeaById() {
           </div>
         </div>
       </div>
-      
+      <div>
+      {
+        localcommented?<div className="challenge-comment-box">
+        <p>Leave a Comment</p>
+        <form className="comment-form">
+          <textarea
+            className="comment-form textarea"
+            rows="3"
+            placeholder="Write your Comment"
+            onChange={(e) => setCommentText(e.target.value)}
+          ></textarea>
+          <div style={{"textAlign":"center"}}>
+            <button className="comment-form button"
+            disabled={commentText.length < 1}
+            onClick={handleSubmit}>
+              Post Comment
+            </button>
+          </div>
+        </form>
+      </div>:<div></div>
+      }</div>
+      <div>
       <div className="comments_section">
-        {comments.map(
+        { comments.map(
           comment => (
             <div>
               <div className="commentBody">
@@ -333,26 +375,8 @@ function ViewIdeaById() {
           )
         )}
       </div>
-
-      <div className="challenge-comment-box">
-        <p>Leave a Comment</p>
-        <form className="comment-form">
-          <textarea
-            className="comment-form textarea"
-            rows="3"
-            placeholder="Write your Comment"
-            onChange={(e) => setCommentText(e.target.value)}
-          ></textarea>
-          <div style={{"textAlign":"center"}}>
-            <button className="comment-form button"
-            disabled={commentText.length < 1}
-            onClick={handleSubmit}>
-              Post Comment
-            </button>
-          </div>
-        </form>
+    
       </div>
-
     </div>
   );
 }

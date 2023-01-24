@@ -17,5 +17,11 @@ class FileService{
     downloadFile(fileId){
       return axios.get( FILE_API_BASE_URL+"download/"+fileId,{  responseType: 'arraybuffer', headers: authHeader() })
     }
+    getFile(fileId){
+      return axios.get(FILE_API_BASE_URL+"get/"+fileId,{headers:authHeader()})
+    }
+    deleteFile(fileId){
+      return axios.get(FILE_API_BASE_URL+"delete/"+fileId,{headers:authHeader()})
+    }
 }
 export default new FileService();
